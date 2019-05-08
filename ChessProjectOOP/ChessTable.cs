@@ -121,7 +121,7 @@ namespace ChessProjectOOP
             var moves = new Dictionary<string, List<PiecePosition>>();
             foreach (var square in squares)
             {
-                if (!square.IsEmpty)
+                if (!square.IsEmpty && square.RepresentedPiece.Owner == OwnerTypes.Black)
                     moves.Add(square.RepresentedPiece.ToString(), square.RepresentedPiece.GetPossibileMoves(squares));
             }
             return moves;
@@ -197,7 +197,10 @@ namespace ChessProjectOOP
                 throw new IllegalMoveException(to.RepresentedPiece, "It's not your turn");
 
             //If the move is even permitted, move
-            from.RepresentedPiece.Move(to.RepresentedPiece.Position, squares);
+            if (!from.RepresentedPiece.Move(to.RepresentedPiece.Position, squares))
+            {
+                throw new IllegalMoveException(from.RepresentedPiece, String.Format("Can not move from {0} to {1}", from.RepresentedPiece.Position.ToString(), to.RepresentedPiece.Position.ToString()));
+            }
 
 
             //If it got to this point notify player2 of what happened

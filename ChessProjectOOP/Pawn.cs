@@ -30,15 +30,67 @@ namespace ChessProjectOOP
         public override List<PiecePosition> GetPossibileMoves(ChessTableSquare[,] table)
         {
             List<PiecePosition> moves = new List<PiecePosition>();
+            if (Position.Row + 1 <= 8)
+            {
+                try
+                {
+                    var newPos = new PiecePosition(Position.Column, Position.Row + 1);
+                    ValidateMove(newPos, table);
+                    moves.Add(newPos);
+                }
+                catch { }
+            }
+            if (Position.Row > 1)
+            {
+                if ((int)Position.Column < 8)
+                {
+                    if (table[(int)Position.Column, Position.Row].RepresentedPiece.Owner != Owner && 
+                        table[(int)Position.Column, Position.Row].RepresentedPiece.Owner != OwnerTypes.Undefined)
+                    {
+                        try
+                        {
+                            var newPos = new PiecePosition((int)Position.Column + 1, Position.Row + 1);
+                            ValidateMove(newPos, table);
+                            moves.Add(newPos);
+                        }
+                        catch { }
+                    }
+                        
+                }
+                if ((int)Position.Column > 1)
+                {
+                    if (table[(int)Position.Column - 2, Position.Row].RepresentedPiece.Owner != Owner &&
+                        table[(int)Position.Column - 2, Position.Row].RepresentedPiece.Owner != OwnerTypes.Undefined)
+                    {
+                        try
+                        {
+                            var newPos = new PiecePosition((int)Position.Column - 1, Position.Row + 1);
+                            ValidateMove(newPos, table);
+                            moves.Add(newPos);
+                        }
+                        catch { }
+                    }
+                }
+            }
+            if (canLeap)
+            {
+                try
+                {
+                    var newPos = new PiecePosition(Position.Column, Position.Row + 2);
+                    ValidateMove(newPos, table);
+                    moves.Add(newPos);
+                }
+                catch { }
+            }
             return moves;
         }
 
-        public override void ValidateMove(PiecePosition newPosition, ChessTableSquare[,] table, int direction = 0)
+        public override bool ValidateMove(PiecePosition newPosition, ChessTableSquare[,] table, int direction = 0)
         {
-            
+            base.ValidateMove(newPosition, table, direction);
         }
 
-        public override void Move(PiecePosition newPosition, ChessTableSquare[,] table)
+        public override bool Move(PiecePosition newPosition, ChessTableSquare[,] table)
         {
             int modifier = (Owner == OwnerTypes.White) ? -1 : 1;
             //TODO: add rule what when it reaches the end of the board  allow the player to get a lost piece back (history needs implement)

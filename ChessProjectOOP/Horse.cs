@@ -28,15 +28,102 @@ namespace ChessProjectOOP
         public override List<PiecePosition> GetPossibileMoves( ChessTableSquare[,] table)
         {
             List<PiecePosition> moves = new List<PiecePosition>();
+            if ((int)Position.Column + 2 < 8  && Position.Row + 1 < 8 )
+            {
+                try
+                {
+                    var newPos = new PiecePosition(Position.Column + 2, Position.Row + 1);
+                    ValidateMove(newPos, table, 1);
+                    moves.Add(newPos);
+                }
+                catch { }
+            }
+
+            if ((int)Position.Column + 2 < 8  && Position.Row - 1 < 1)
+            {
+                try
+                {
+                    var newPos = new PiecePosition(Position.Column + 2, Position.Row - 1);
+                    ValidateMove(newPos, table, 2);
+                    moves.Add(newPos);
+                }
+                catch { }
+            }
+
+            if ((int)Position.Column - 2 < 1 && Position.Row + 1 < 8 )
+            {
+                try
+                {
+                    var newPos = new PiecePosition(Position.Column - 2, Position.Row + 1);
+                    ValidateMove(newPos, table, 3);
+                    moves.Add(newPos);
+                }
+                catch { }
+            }
+
+            if ((int)Position.Column - 2 < 1 && Position.Row - 1 >= 1)
+            {
+                try
+                {
+                    var newPos = new PiecePosition(Position.Column - 2, Position.Row - 1);
+                    ValidateMove(newPos, table, 4);
+                    moves.Add(newPos);
+                }
+                catch { }
+            }
+
+            if ((int)Position.Column + 1 < 8  && Position.Row + 2 < 8 )
+            {
+                try
+                {
+                    var newPos = new PiecePosition(Position.Column + 1, Position.Row + 2);
+                    ValidateMove(newPos, table, 5);
+                    moves.Add(newPos);
+                }
+                catch { }
+            }
+
+            if ((int)Position.Column + 1 < 8  && Position.Row - 2 >= 1)
+            {
+                try
+                {
+                    var newPos = new PiecePosition(Position.Column + 1, Position.Row - 2);
+                    ValidateMove(newPos, table, 6);
+                    moves.Add(newPos);
+                }
+                catch { }
+            }
+
+            if ((int)Position.Column - 1 >= 1 && Position.Row + 2 < 8 )
+            {
+                try
+                {
+                    var newPos = new PiecePosition(Position.Column - 1, Position.Row + 2);
+                    ValidateMove(newPos, table, 7);
+                    moves.Add(newPos);
+                }
+                catch { }
+            }
+
+            if ((int)Position.Column - 1 >= 1 && Position.Row - 2 >= 1)
+            {
+                try
+                {
+                    var newPos = new PiecePosition(Position.Column - 1, Position.Row - 2);
+                    ValidateMove(newPos, table, 8);
+                    moves.Add(newPos);
+                }
+                catch { }
+            }
             return moves;
         }
     
-        public override void ValidateMove(PiecePosition newPosition, ChessTableSquare[,] table, int direction = 0)
+        public override bool ValidateMove(PiecePosition newPosition, ChessTableSquare[,] table, int direction = 0)
         {
-           
+            base.ValidateMove(newPosition, table, direction);
         }
 
-        public override void Move(PiecePosition newPosition, ChessTableSquare[,] table)
+        public override bool Move(PiecePosition newPosition, ChessTableSquare[,] table)
         {
             //Check for for each of the 8 possibile moves by checking some argument first
             //For example the first move is bottom left, condition is row changed by 2, then if column changed by 1

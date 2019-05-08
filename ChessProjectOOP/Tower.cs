@@ -31,13 +31,9 @@ namespace ChessProjectOOP
 
             for (int i = Position.Row + 1; i < table.GetLength(1); i++)
             {
-                try
-                {
-                    var newPos = new PiecePosition(Position.Column, i);
-                    ValidateMove(newPos, table, 1);
+                var newPos = new PiecePosition(Position.Column, i);
+                if (ValidateMove(newPos, table, 1))
                     moves.Add(newPos);
-                }
-                catch { }
             }
 
             for (int i = Position.Row - 1; i > 0; i--)
@@ -75,13 +71,14 @@ namespace ChessProjectOOP
             return moves;
         }
 
-        public override void ValidateMove(PiecePosition newPosition, ChessTableSquare[,] table, int direction = 0)
+        public override bool ValidateMove(PiecePosition newPosition, ChessTableSquare[,] table, int direction = 0)
         {
-            base.ValidateMove(newPosition, table, direction);
+            if (!base.ValidateMove(newPosition, table, direction))
+                return false;
 
 
             if (direction == 0 && Position.Row != newPosition.Row && Position.Column != newPosition.Column)
-                throw new IllegalMoveException(this, String.Format("Can not move from {0} to {1}", Position.ToString(), newPosition.ToString()));
+                return false;
             
             //Colision rules
             if ((direction == 0 || direction ==  1) && newPosition.Row > Position.Row)
@@ -111,18 +108,17 @@ namespace ChessProjectOOP
             }
         }
 
-        public override void Move(PiecePosition newPosition, ChessTableSquare[,] table)
+        public override bool Move(PiecePosition newPosition, ChessTableSquare[,] table)
         {
-            try
+            if (ValidateMove(newPosition, table))
             {
-                ValidateMove(newPosition, table);
                 Position = newPosition;
+                return true;
             }
-            catch (Exception)
+            else
             {
-                throw;
+                return false;
             }
-            
         }
     }
 }

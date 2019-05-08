@@ -106,13 +106,14 @@ namespace ChessProjectOOP
 
         public abstract List<PiecePosition> GetPossibileMoves(ChessTableSquare[,] table);
 
-        public virtual void ValidateMove(PiecePosition newPosition, ChessTableSquare[,] table, int direction = 0)
+        public virtual bool ValidateMove(PiecePosition newPosition, ChessTableSquare[,] table, int direction = 0)
         {
             if (table[(int)newPosition.Column - 1, newPosition.Row - 1].RepresentedPiece.Owner == Owner)
-                throw new IllegalMoveException(this, "You can not move over your own pieces");
+                return false;
+            return true;
         }
         // TODO: add extra rule to check if there is no piece in the way of the piece movement: done for tower
-        public abstract void Move(PiecePosition newPosition, ChessTableSquare[,] table);
+        public abstract bool Move(PiecePosition newPosition, ChessTableSquare[,] table);
 
         public override string ToString()
         {
