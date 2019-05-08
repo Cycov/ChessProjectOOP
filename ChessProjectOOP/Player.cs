@@ -49,8 +49,8 @@ namespace ChessProjectOOP
             Pieces.Add(new Tower(Owner, new PiecePosition(EColumn.H, (int)Owner)));
             Pieces.Add(new Horse(Owner, new PiecePosition(EColumn.B, (int)Owner)));
             Pieces.Add(new Horse(Owner, new PiecePosition(EColumn.G, (int)Owner)));
-            Pieces.Add(new Insane(Owner, new PiecePosition(EColumn.C, (int)Owner)));
-            Pieces.Add(new Insane(Owner, new PiecePosition(EColumn.F, (int)Owner)));
+            Pieces.Add(new Knight(Owner, new PiecePosition(EColumn.C, (int)Owner)));
+            Pieces.Add(new Knight(Owner, new PiecePosition(EColumn.F, (int)Owner)));
             Pieces.Add(new King(Owner, new PiecePosition(EColumn.E, (int)Owner)));
             Pieces.Add(new Queen(Owner, new PiecePosition(EColumn.D, (int)Owner)));
         }

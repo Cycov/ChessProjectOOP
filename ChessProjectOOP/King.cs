@@ -25,6 +25,16 @@ namespace ChessProjectOOP
             Picture.Dispose();
         }
 
+        public override List<PiecePosition> GetPossibileMoves( ChessTableSquare[,] table)
+        {
+            List<PiecePosition> moves = new List<PiecePosition>();
+            return moves;
+        }
+        public override void ValidateMove(PiecePosition newPosition, ChessTableSquare[,] table, int direction = 0)
+        {
+           
+        }
+
         public override void Move(PiecePosition newPosition, ChessTableSquare[,] table)
         {
             if ((Math.Abs(newPosition.Column - Position.Column) == Math.Abs(newPosition.Row - Position.Row)) && Math.Abs(newPosition.Row - Position.Row) == 1)

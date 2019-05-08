@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Reflection;
@@ -103,6 +104,13 @@ namespace ChessProjectOOP
             Position = position;
         }
 
+        public abstract List<PiecePosition> GetPossibileMoves(ChessTableSquare[,] table);
+
+        public virtual void ValidateMove(PiecePosition newPosition, ChessTableSquare[,] table, int direction = 0)
+        {
+            if (table[(int)newPosition.Column - 1, newPosition.Row - 1].RepresentedPiece.Owner == Owner)
+                throw new IllegalMoveException(this, "You can not move over your own pieces");
+        }
         // TODO: add extra rule to check if there is no piece in the way of the piece movement: done for tower
         public abstract void Move(PiecePosition newPosition, ChessTableSquare[,] table);
 

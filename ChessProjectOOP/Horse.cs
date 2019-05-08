@@ -25,6 +25,17 @@ namespace ChessProjectOOP
             Picture.Dispose();
         }
 
+        public override List<PiecePosition> GetPossibileMoves( ChessTableSquare[,] table)
+        {
+            List<PiecePosition> moves = new List<PiecePosition>();
+            return moves;
+        }
+    
+        public override void ValidateMove(PiecePosition newPosition, ChessTableSquare[,] table, int direction = 0)
+        {
+           
+        }
+
         public override void Move(PiecePosition newPosition, ChessTableSquare[,] table)
         {
             //Check for for each of the 8 possibile moves by checking some argument first
@@ -43,5 +54,6 @@ namespace ChessProjectOOP
 
             throw new IllegalMoveException(this, String.Format("Can not move from {0} to {1}", Position.ToString(), newPosition.ToString()));
         }
+
     }
 }

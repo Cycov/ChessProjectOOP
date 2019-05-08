@@ -49,7 +49,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="Utilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Utilities\bin\Debug\Utilities.dll</HintPath>
+      <HintPath>..\Utilities-master\bin\Debug\Utilities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -73,7 +73,7 @@
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="IllegalMoveException.cs" />
-    <Compile Include="Insane.cs" />
+    <Compile Include="Knight.cs" />
     <Compile Include="King.cs" />
     <Compile Include="PictureListbox.cs">
       <SubType>Component</SubType>

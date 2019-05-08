@@ -12,6 +12,11 @@ namespace ChessProjectOOP
         public EColumn Column { get; set; }
         public int Row { get; set; }
 
+        public PiecePosition(int column, int row) : this((EColumn)column, row)
+        {
+
+        }
+
         public PiecePosition(EColumn column, int row)
         {
             if (row < 1 || row > 8)

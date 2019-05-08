@@ -108,8 +108,11 @@ namespace ChessProjectOOP
 
         private void testBtn_Click(object sender, EventArgs e)
         {
-            InitialisePlayers(OwnerTypes.White, OwnerTypes.Black, "");
+            InitialisePlayers(OwnerTypes.White, OwnerTypes.Black, "Computer");
+            mainChessTable.ResetTable();
+            historyDisplay.Items.Clear();
             mainChessTable.InitialisePlayers(player1, player2);
+            StartGame();
         }
 
         private void joinGameBtn_Click(object sender, EventArgs e)
@@ -191,6 +194,20 @@ namespace ChessProjectOOP
         private void MainWindow_Load(object sender, EventArgs e)
         {
             mainChessTable.Enabled = false;
+        }
+
+        private void showPos_Click(object sender, EventArgs e)
+        {
+            var positions = mainChessTable.GetAllPossibileMoves();
+            foreach (var item in positions)
+            {
+                StringBuilder builder = new StringBuilder();
+                foreach (var pos in item.Value)
+                {
+                    builder.Append(" [" + pos.ToString() + "]");
+                }
+                Debug.WriteLine($"{item.Key} : {builder.ToString()}");
+            }
         }
 
         private void networkConnection_OnDataRecieved(object sender, DataRecievedEventArgs e)
@@ -312,8 +329,9 @@ namespace ChessProjectOOP
             }
 
             historyDisplay.TopIndex = historyDisplay.Items.Count - 1;
-
+            
             //Notify the other player of the move
+            /*
             if (networkConnection.Connected && e.MovedPiece.Owner == player1.Owner)
             {
                 player1.CanMove = false;
@@ -322,7 +340,7 @@ namespace ChessProjectOOP
                     networkConnection.Send("M;" + e.BeforePosition.ToString(false) + ";" + e.AfterPosition.ToString(false));
                 else
                     networkConnection.Reply("M;" + e.BeforePosition.ToString(false) + ";" + e.AfterPosition.ToString(false));
-            }
+            }*/
         }
         
         private void MainChessTable_OnKingLost(object sender, PieceLostEventArgs e)

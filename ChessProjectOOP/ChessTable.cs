@@ -1,6 +1,7 @@
 ﻿using System.Windows.Forms;
 using System.Drawing;
 using System;
+using System.Collections.Generic;
 
 namespace ChessProjectOOP
 {
@@ -115,6 +116,17 @@ namespace ChessProjectOOP
             }
         }
 
+        public Dictionary<string, List<PiecePosition>> GetAllPossibileMoves()
+        {
+            var moves = new Dictionary<string, List<PiecePosition>>();
+            foreach (var square in squares)
+            {
+                if (!square.IsEmpty)
+                    moves.Add(square.RepresentedPiece.ToString(), square.RepresentedPiece.GetPossibileMoves(squares));
+            }
+            return moves;
+        }
+
         private void ChessTableSquare_MouseDown(object sender, MouseEventArgs e)
         {
             if (!Enabled)
@@ -156,7 +168,7 @@ namespace ChessProjectOOP
         {
             try
             {
-                AttemptMove(from, to, false);
+                AttemptMove(from, to, true);
             }
             catch (IllegalMoveException ex)
             {

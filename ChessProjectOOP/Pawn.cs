@@ -27,6 +27,17 @@ namespace ChessProjectOOP
             Picture.Dispose();
         }
 
+        public override List<PiecePosition> GetPossibileMoves(ChessTableSquare[,] table)
+        {
+            List<PiecePosition> moves = new List<PiecePosition>();
+            return moves;
+        }
+
+        public override void ValidateMove(PiecePosition newPosition, ChessTableSquare[,] table, int direction = 0)
+        {
+            
+        }
+
         public override void Move(PiecePosition newPosition, ChessTableSquare[,] table)
         {
             int modifier = (Owner == OwnerTypes.White) ? -1 : 1;
