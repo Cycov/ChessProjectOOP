@@ -10,8 +10,8 @@ namespace ChessProjectOOP
     {
         Pawn,
         Tower,
-        Horse,
-        Insane,
+        Knight,
+        Bishop,
         King,
         Queen,
         Undefined,

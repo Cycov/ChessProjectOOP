@@ -37,7 +37,7 @@ namespace ChessProjectOOP
 
         public override bool ValidateMove(PiecePosition newPosition, ChessTableSquare[,] table, int direction = 0)
         {
-            return;
+            return false;
         }
     }
 }

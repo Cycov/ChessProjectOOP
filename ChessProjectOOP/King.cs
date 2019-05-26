@@ -31,124 +31,87 @@ namespace ChessProjectOOP
 
             if (Position.Row + 1 <= 8)
             {
-                try
-                {
-                    var newPos = new PiecePosition(Position.Column, Position.Row + 1); //0-up
-                    ValidateMove(newPos, table, 1);
+                var newPos = new PiecePosition(Position.Column, Position.Row + 1); //0-up
+                if (ValidateMove(newPos, table, 1))
                     moves.Add(newPos);
-                }
-                catch { }
             }
 
             if (Position.Row - 1 >= 1)
             {
-                try
-                {
-                    var newPos = new PiecePosition(Position.Column, Position.Row - 1); //0-down
-                    ValidateMove(newPos, table, 2);
+                var newPos = new PiecePosition(Position.Column, Position.Row - 1); //0-down
+                if (ValidateMove(newPos, table, 2))
                     moves.Add(newPos);
-                }
-                catch { }
             }
 
             if ((int)Position.Column + 1 <= 8)
             {
-                try
-                {
-                    var newPos = new PiecePosition(Position.Column + 1, Position.Row); //up-0
-                    ValidateMove(newPos, table, 3);
+                var newPos = new PiecePosition(Position.Column + 1, Position.Row); //up-0
+                if (ValidateMove(newPos, table, 3))
                     moves.Add(newPos);
-                }
-                catch { }
             }
 
             if ((int)Position.Column - 1 >= 1)
             {
-                try
-                {
-                    var newPos = new PiecePosition(Position.Column - 1, Position.Row); //down-0
-                    ValidateMove(newPos, table, 4);
+                var newPos = new PiecePosition(Position.Column - 1, Position.Row); //down-0
+                if (ValidateMove(newPos, table, 4))
                     moves.Add(newPos);
-                }
-                catch { }
             }
 
             if ((int)Position.Column + 1 <= 8 && Position.Row + 1 <= 8)
             {
-                try
-                {
-                    var newPos = new PiecePosition(Position.Column + 1, Position.Row + 1); //up-up
-                    ValidateMove(newPos, table, 5);
+                var newPos = new PiecePosition(Position.Column + 1, Position.Row + 1); //up-up
+                if (ValidateMove(newPos, table, 5))
                     moves.Add(newPos);
-                }
-                catch { }
             }
 
             if ((int)Position.Column + 1 >= 1 && Position.Row + 1 <= 8)
             {
-                try
-                {
-                    var newPos = new PiecePosition(Position.Column - 1, Position.Row + 1); //down-up
-                    ValidateMove(newPos, table, 6);
+                var newPos = new PiecePosition(Position.Column - 1, Position.Row + 1); //down-up
+                if (ValidateMove(newPos, table, 6))
                     moves.Add(newPos);
-                }
-                catch { }
             }
 
-            if ((int)Position.Column + 1 <= 8 && Position.Row + 1 >= 1)
+            if ((int)Position.Column + 1 <= 8 && Position.Row - 1 >= 1)
             {
-                try
-                {
-                    var newPos = new PiecePosition(Position.Column + 1, Position.Row - 1); //up-down
-                    ValidateMove(newPos, table, 7);
+                var newPos = new PiecePosition(Position.Column + 1, Position.Row - 1); //up-down
+                if (ValidateMove(newPos, table, 7))
                     moves.Add(newPos);
-                }
-                catch { }
             }
 
-            if ((int)Position.Column + 1 >= 1 && Position.Row + 1 >= 1)
+            if ((int)Position.Column - 1 >= 1 && Position.Row - 1 >= 1)
             {
-                try
-                {
-                    var newPos = new PiecePosition(Position.Column - 1, Position.Row - 1); //down-down
-                    ValidateMove(newPos, table, 8);
+                var newPos = new PiecePosition(Position.Column - 1, Position.Row - 1); //down-down
+                if (ValidateMove(newPos, table, 8))
                     moves.Add(newPos);
-                }
-                catch { }
             }
 
             return moves;
         }
         public override bool ValidateMove(PiecePosition newPosition, ChessTableSquare[,] table, int direction = 0)
         {
-            base.ValidateMove(newPosition, table, direction);
+            if (!base.ValidateMove(newPosition, table, direction))
+                return false;
 
 
             // TODO: sah-mat
 
             if (direction == 0 && Position.Row != newPosition.Row && Position.Column != newPosition.Column)
-                throw new IllegalMoveException(this, String.Format("Can not move from {0} to {1}", Position.ToString(), newPosition.ToString()));
+                return true;
+
+            return false;
         }
 
         public override bool Move(PiecePosition newPosition, ChessTableSquare[,] table)
         {
-            if ((Math.Abs(newPosition.Column - Position.Column) == Math.Abs(newPosition.Row - Position.Row)) && Math.Abs(newPosition.Row - Position.Row) == 1)
+            if (ValidateMove(newPosition, table))
             {
                 Position = newPosition;
-                return;
+                return true;
             }
-            if ((newPosition.Row == Position.Row && newPosition.Column != Position.Column) && Math.Abs(newPosition.Column - Position.Column) == 1)
+            else
             {
-                Position = newPosition;
-                return;
+                return false;
             }
-
-            if ((newPosition.Column == Position.Column && newPosition.Row != Position.Row) && Math.Abs(newPosition.Row - Position.Row) == 1)
-            {
-                Position = newPosition;
-                return;
-            }
-            throw new IllegalMoveException(this, "Can not move to the new position: " + newPosition.ToString());
         }
     }
 }

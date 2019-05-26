@@ -18,6 +18,7 @@ namespace ChessProjectOOP
         private ChessTable mainChessTable;
         private bool isServer, isClient, gameRunning;
 
+        private Dictionary<string, List<PiecePosition>> currentStatePossibileMoves;
         // WARNING : Huge memory leak + ~500 (~23 mb) objects at first piece move start and + ~20 (~3.5 kb) objects more per consecutive move. Something is not disposing properly.
 
         //Initialisers
@@ -198,8 +199,8 @@ namespace ChessProjectOOP
 
         private void showPos_Click(object sender, EventArgs e)
         {
-            var positions = mainChessTable.GetAllPossibileMoves();
-            foreach (var item in positions)
+            currentStatePossibileMoves = mainChessTable.GetAllPossibileMoves();
+            foreach (var item in currentStatePossibileMoves)
             {
                 StringBuilder builder = new StringBuilder();
                 foreach (var pos in item.Value)

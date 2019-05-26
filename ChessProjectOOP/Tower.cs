@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChessProjectOOP
 {
@@ -71,7 +67,7 @@ namespace ChessProjectOOP
             //Colision rules
             if ((direction == 0 || direction ==  1) && newPosition.Row > Position.Row)
             {
-                for (int i = Position.Row + 1; i < newPosition.Row; i++) //up-down
+                for (int i = Position.Row + 1; i <= newPosition.Row; i++) //up-down
                     if (!table[(int)Position.Column - 1, i - 1].IsEmpty)
                         return false;
                     else
@@ -80,7 +76,7 @@ namespace ChessProjectOOP
 
             if ((direction == 0 || direction == 2) && newPosition.Row < Position.Row)
             {
-                for (int i = Position.Row - 1; i > newPosition.Row; i--) //up-down
+                for (int i = Position.Row - 1; i >= newPosition.Row; i--) //up-down
                     if (!table[(int)Position.Column - 1, i - 1].IsEmpty)
                         return false;
                     else
@@ -90,7 +86,7 @@ namespace ChessProjectOOP
 
             if ((direction == 0 || direction == 3) && (int)newPosition.Column > (int)Position.Column)
             {
-                for (int i = (int)Position.Column + 1; i < (int)newPosition.Column; i++)
+                for (int i = (int)Position.Column + 1; i <= (int)newPosition.Column; i++)
                     if (!table[i - 1, Position.Row - 1].IsEmpty)
                         return false;
                     else
@@ -99,13 +95,13 @@ namespace ChessProjectOOP
 
             if ((direction == 0 || direction == 4) && (int)newPosition.Column < (int)Position.Column)
             {
-                for (int i = (int)Position.Column - 1; i > (int)newPosition.Column; i--)
+                for (int i = (int)Position.Column - 1; i >= (int)newPosition.Column; i--)
                     if (!table[i - 1, Position.Row - 1].IsEmpty)
                         return false;
                     else
                         return true;
             }
-            
+            return false;
         }
 
         public override bool Move(PiecePosition newPosition, ChessTableSquare[,] table)

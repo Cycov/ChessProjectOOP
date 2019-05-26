@@ -42,15 +42,15 @@ namespace ChessProjectOOP
             else
                 row = 7;
 
-            for (int i = 0; i < 8; i++)
-                Pieces.Add(new Pawn(Owner, new PiecePosition((EColumn)(i + 1), row)));
+            //for (int i = 0; i < 8; i++)
+            //    Pieces.Add(new Pawn(Owner, new PiecePosition((EColumn)(i + 1), row)));
 
             Pieces.Add(new Tower(Owner, new PiecePosition(EColumn.A, (int)Owner)));
             Pieces.Add(new Tower(Owner, new PiecePosition(EColumn.H, (int)Owner)));
-            Pieces.Add(new Horse(Owner, new PiecePosition(EColumn.B, (int)Owner)));
-            Pieces.Add(new Horse(Owner, new PiecePosition(EColumn.G, (int)Owner)));
-            Pieces.Add(new Knight(Owner, new PiecePosition(EColumn.C, (int)Owner)));
-            Pieces.Add(new Knight(Owner, new PiecePosition(EColumn.F, (int)Owner)));
+            Pieces.Add(new Knight(Owner, new PiecePosition(EColumn.B, (int)Owner)));
+            Pieces.Add(new Knight(Owner, new PiecePosition(EColumn.G, (int)Owner)));
+            Pieces.Add(new Bishop(Owner, new PiecePosition(EColumn.C, (int)Owner)));
+            Pieces.Add(new Bishop(Owner, new PiecePosition(EColumn.F, (int)Owner)));
             Pieces.Add(new King(Owner, new PiecePosition(EColumn.E, (int)Owner)));
             Pieces.Add(new Queen(Owner, new PiecePosition(EColumn.D, (int)Owner)));
         }

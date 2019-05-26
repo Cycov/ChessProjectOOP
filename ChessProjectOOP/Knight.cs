@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ChessProjectOOP
 {
     class Knight : Piece, IDisposable
     {
-        public Knight(OwnerTypes owner, PiecePosition position) : base(owner,position)
+        public Knight(OwnerTypes owner, PiecePosition position) : base(owner, position)
         {
-            Type = PieceTypes.Insane;
+            Type = PieceTypes.Knight;
             name = "Knight";
 
             if (owner == OwnerTypes.Black)
-                Picture = new Bitmap(Properties.Resources.BlackInsane);
+                Picture = new Bitmap(Properties.Resources.BlackHorse);
             else
-                Picture = new Bitmap(Properties.Resources.WhiteInsane);
+                Picture = new Bitmap(Properties.Resources.WhiteHorse);
 
         }
         public override void Dispose()
@@ -25,103 +28,139 @@ namespace ChessProjectOOP
         public override List<PiecePosition> GetPossibileMoves(ChessTableSquare[,] table)
         {
             List<PiecePosition> moves = new List<PiecePosition>();
-
-            for (int i = (int)Position.Column + 1, j = (int)Position.Row + 1; i < 8 & j < 8; i++, j++) //UP-UP
+            if ((int)Position.Column + 2 < 8 && Position.Row + 1 < 8)
             {
-                try
-                {
-                    var newPos = new PiecePosition(i, j);
-                    ValidateMove(newPos, table, 5);
+
+                var newPos = new PiecePosition(Position.Column + 2, Position.Row + 1);
+                if (ValidateMove(newPos, table, 1))
                     moves.Add(newPos);
-                }
-                catch { }
+
             }
 
-            for (int i = (int)Position.Column - 1, j = (int)Position.Row + 1; i > 1 & j < 8; i--, j++) //DOWN-UP
+            if ((int)Position.Column + 2 < 8 && Position.Row > 1)
             {
-                try
-                {
-                    var newPos = new PiecePosition(i, j);
-                    ValidateMove(newPos, table, 6);
+                var newPos = new PiecePosition(Position.Column + 2, Position.Row - 1);
+                if (ValidateMove(newPos, table, 2))
                     moves.Add(newPos);
-                }
-                catch { }
             }
 
-            for (int i = (int)Position.Column + 1, j = (int)Position.Row - 1; i < 8 & j > 1; i++, j--) //up-down
+            if ((int)Position.Column - 2 > 1 && Position.Row + 1 < 8)
             {
-                try
-                {
-                    var newPos = new PiecePosition(i, j);
-                    ValidateMove(newPos, table, 7);
+                var newPos = new PiecePosition(Position.Column - 2, Position.Row + 1);
+                if (ValidateMove(newPos, table, 3))
                     moves.Add(newPos);
-                }
-                catch { }
             }
 
-            for (int i = (int)Position.Column - 1, j = (int)Position.Row - 1; i > 1 & j > 1; i--, j--) //down-down
+            if ((int)Position.Column - 2 < 1 && Position.Row - 1 >= 1)
             {
-                try
-                {
-                    var newPos = new PiecePosition(i, j);
-                    ValidateMove(newPos, table, 8);
+                var newPos = new PiecePosition(Position.Column - 2, Position.Row - 1);
+                if (ValidateMove(newPos, table, 4))
                     moves.Add(newPos);
-                }
-                catch { }
             }
 
+            if ((int)Position.Column + 1 <= 8 && Position.Row + 2 < 8)
+            {
+                var newPos = new PiecePosition(Position.Column + 1, Position.Row + 2);
+                if (ValidateMove(newPos, table, 5))
+                    moves.Add(newPos);
+            }
+
+            if ((int)Position.Column + 1 <= 8 && Position.Row - 2 >= 1)
+            {
+                var newPos = new PiecePosition(Position.Column + 1, Position.Row - 2);
+                if (ValidateMove(newPos, table, 6))
+                    moves.Add(newPos);
+            }
+
+            if ((int)Position.Column - 1 >= 1 && Position.Row + 2 < 8)
+            {
+                var newPos = new PiecePosition(Position.Column - 1, Position.Row + 2);
+                if (ValidateMove(newPos, table, 7))
+                    moves.Add(newPos);
+            }
+
+            if ((int)Position.Column - 1 >= 1 && Position.Row - 2 >= 1)
+            {
+                var newPos = new PiecePosition(Position.Column - 1, Position.Row - 2);
+                if (ValidateMove(newPos, table, 8))
+                    moves.Add(newPos);
+            }
             return moves;
         }
+
         public override bool ValidateMove(PiecePosition newPosition, ChessTableSquare[,] table, int direction = 0)
         {
-            base.ValidateMove(newPosition, table, direction);
+            if (!base.ValidateMove(newPosition, table, direction))
+                return false;
 
-            if (direction == 0 && Position.Row != newPosition.Row && Position.Column != newPosition.Column)
-                throw new IllegalMoveException(this, String.Format("Can not move from {0} to {1}", Position.ToString(), newPosition.ToString()));
 
-            //Colision rules
-            if ((direction == 0 || direction == 5) && (int)newPosition.Column > (int)Position.Column && (int)newPosition.Row > (int)Position.Row)
+            if (direction == 0 && Position.Row == newPosition.Row && Position.Column == newPosition.Column)
+                return false;
+
+            if ((direction == 0 || direction == 1) && 
+                newPosition.Row == Position.Row + 1 && newPosition.Column == Position.Column + 2)
             {
-                for (int i = (int)Position.Column + 1, j = (int)Position.Row + 1; i < 8 & j < 8; i++, j++)
-                    if (!table[i + 1, j + 1].IsEmpty)
-                        throw new IllegalMoveException(this, String.Format("Can not move from {0} to {1}", Position.ToString(), newPosition.ToString()));
+                return true;
             }
 
-            if ((direction == 0 || direction == 6) && (int)newPosition.Column < (int)Position.Column && (int)newPosition.Row > (int)Position.Row)
+            if ((direction == 0 || direction == 2) && 
+                newPosition.Row == Position.Row - 1 && newPosition.Column == Position.Column + 2)
             {
-                for (int i = (int)Position.Column - 1, j = (int)Position.Row + 1; i > 1 & j < 8; i--, j++)
-                    if (!table[i - 1, j + 1].IsEmpty)
-                        throw new IllegalMoveException(this, String.Format("Can not move from {0} to {1}", Position.ToString(), newPosition.ToString()));
+                        return true;
             }
 
-            if ((direction == 0 || direction == 7) && (int)newPosition.Column > (int)Position.Column && (int)newPosition.Row < (int)Position.Row)
+            if ((direction == 0 || direction == 3) && 
+                newPosition.Row == Position.Row + 1 && newPosition.Column == Position.Column - 2)
             {
-                for (int i = (int)Position.Column + 1, j = (int)Position.Row - 1; i < 8 & j > 1; i++, j--)
-                    if (!table[i + 1, j - 1].IsEmpty)
-                        throw new IllegalMoveException(this, String.Format("Can not move from {0} to {1}", Position.ToString(), newPosition.ToString()));
+                return true;
             }
 
-            if ((direction == 0 || direction == 8) && (int)newPosition.Column < (int)Position.Column && (int)newPosition.Row < (int)Position.Row)
+            if ((direction == 0 || direction == 4) &&
+                newPosition.Row == Position.Row - 1 && newPosition.Column == Position.Column - 2)
             {
-                for (int i = (int)Position.Column - 1, j = (int)Position.Row - 1; i > 1 & j > 1; i--, j--)
-                    if (!table[i - 1, j - 1].IsEmpty)
-                        throw new IllegalMoveException(this, String.Format("Can not move from {0} to {1}", Position.ToString(), newPosition.ToString()));
+                return true;
             }
 
+            if ((direction == 0 || direction == 5) &&
+                newPosition.Row == Position.Row + 2 && newPosition.Column == Position.Column + 1)
+            {
+                return true;
+            }
+
+            if ((direction == 0 || direction == 6) &&
+                newPosition.Row == Position.Row - 2 && newPosition.Column == Position.Column + 1)
+            {
+                return true;
+            }
+
+            if ((direction == 0 || direction == 7) &&
+                newPosition.Row == Position.Row + 2 && newPosition.Column == Position.Column - 1)
+            {
+                return true;
+            }
+
+            if ((direction == 0 || direction == 8) &&
+                newPosition.Row == Position.Row - 2 && newPosition.Column == Position.Column - 1)
+            {
+                return true;
+            }
+            return false;
         }
 
         public override bool Move(PiecePosition newPosition, ChessTableSquare[,] table)
         {
-            try
+            //Check for for each of the 8 possibile moves by checking some argument first
+            //For example the first move is bottom left, condition is row changed by 2, then if column changed by 1
+            //Because the first part of an if (_&&_) is executed first, it suits perfectly
+            if (ValidateMove(newPosition, table))
             {
-                ValidateMove(newPosition, table);
                 Position = newPosition;
+                return true;
             }
-            catch (Exception)
+            else
             {
-                throw;
+                return false;
             }
         }
-
     }
 }

@@ -30,107 +30,110 @@ namespace ChessProjectOOP
         public override List<PiecePosition> GetPossibileMoves(ChessTableSquare[,] table)
         {
             List<PiecePosition> moves = new List<PiecePosition>();
+
+            // TODO: Only for black, add white
             if (Position.Row + 1 <= 8)
             {
-                try
+                var newPos = new PiecePosition(Position.Column, Position.Row + 1);
+                if (ValidateMove(newPos, table, 1))
                 {
-                    var newPos = new PiecePosition(Position.Column, Position.Row + 1);
-                    ValidateMove(newPos, table);
                     moves.Add(newPos);
+                    if (canLeap)
+                    {
+                        newPos = new PiecePosition(Position.Column, Position.Row + 2);
+                        if (ValidateMove(newPos, table, 4))
+                            moves.Add(newPos);
+                    }
                 }
-                catch { }
             }
+
             if (Position.Row > 1)
             {
                 if ((int)Position.Column < 8)
                 {
-                    if (table[(int)Position.Column, Position.Row].RepresentedPiece.Owner != Owner && 
-                        table[(int)Position.Column, Position.Row].RepresentedPiece.Owner != OwnerTypes.Undefined)
+                    if (table[(int)Position.Column, Position.Row].RepresentedPiece.Owner == OwnerTypes.White)
                     {
-                        try
-                        {
-                            var newPos = new PiecePosition((int)Position.Column + 1, Position.Row + 1);
-                            ValidateMove(newPos, table);
+                        var newPos = new PiecePosition((int)Position.Column + 1, Position.Row - 1);
+                        if (ValidateMove(newPos, table, 2))
                             moves.Add(newPos);
-                        }
-                        catch { }
                     }
                         
                 }
+
                 if ((int)Position.Column > 1)
                 {
-                    if (table[(int)Position.Column - 2, Position.Row].RepresentedPiece.Owner != Owner &&
-                        table[(int)Position.Column - 2, Position.Row].RepresentedPiece.Owner != OwnerTypes.Undefined)
+                    if (table[(int)Position.Column - 2, Position.Row].RepresentedPiece.Owner == OwnerTypes.White)
                     {
-                        try
-                        {
-                            var newPos = new PiecePosition((int)Position.Column - 1, Position.Row + 1);
-                            ValidateMove(newPos, table);
+                        var newPos = new PiecePosition((int)Position.Column - 1, Position.Row + 1);
+                        if (ValidateMove(newPos, table, 3))
                             moves.Add(newPos);
-                        }
-                        catch { }
                     }
                 }
             }
-            if (canLeap)
-            {
-                try
-                {
-                    var newPos = new PiecePosition(Position.Column, Position.Row + 2);
-                    ValidateMove(newPos, table);
-                    moves.Add(newPos);
-                }
-                catch { }
-            }
+
             return moves;
         }
 
         public override bool ValidateMove(PiecePosition newPosition, ChessTableSquare[,] table, int direction = 0)
         {
-            base.ValidateMove(newPosition, table, direction);
-        }
+            if (!base.ValidateMove(newPosition, table, direction))
+                return false;
 
-        public override bool Move(PiecePosition newPosition, ChessTableSquare[,] table)
-        {
+
+            if (direction == 0 && Position.Row != newPosition.Row && Position.Column != newPosition.Column)
+                return false;
+
             int modifier = (Owner == OwnerTypes.White) ? -1 : 1;
             //TODO: add rule what when it reaches the end of the board  allow the player to get a lost piece back (history needs implement)
 
-            if (newPosition.Equals(Position))
-                throw new IllegalMoveException(this, "Can not move to the exact same position");
-            
+
             //Collision detection
             if (canLeap && !table[(int)Position.Column - 1, Position.Row + modifier - 1].IsEmpty)
-                throw new IllegalMoveException(this, String.Format("Can not move from {0} to {1}", Position.ToString(), newPosition.ToString()));
+                return false;
 
             //Normal forward, 2 start leap and take other rules
             if ((newPosition.Row == Position.Row + modifier) && (newPosition.Column == Position.Column))
             {
-                if (!table[(int)newPosition.Column - 1,newPosition.Row - 1].IsEmpty)
-                    throw new IllegalMoveException(this, String.Format("Can not move from {0} to {1}", Position.ToString(), newPosition.ToString()));
-                Position = newPosition;
+                if (table[(int)newPosition.Column - 1, newPosition.Row - 1].IsEmpty)
+                {
+                    return true;
+                }
             }
             else if (newPosition.Column != EColumn.H && //if on the right is a piece
                 (newPosition.Row == Position.Row + modifier) &&
-                ((int)newPosition.Column == (int)Position.Column + 1) && 
+                ((int)newPosition.Column == (int)Position.Column + 1) &&
                 !table[(int)newPosition.Column - 1, newPosition.Row - 1].IsEmpty)
             {
-                Position = newPosition;
+                return true;
             }
             else if (newPosition.Column != EColumn.A && //if on the left is a piece
                 (newPosition.Row == Position.Row + modifier) &&
                 ((int)newPosition.Column == (int)Position.Column - 1) &&
                 !table[(int)newPosition.Column - 1, newPosition.Row - 1].IsEmpty)
             {
-                Position = newPosition;
+                return true;
             }
             else if (canLeap && (newPosition.Row == Position.Row + modifier * 2) && (newPosition.Column == Position.Column))
             {
-                Position = newPosition;
+                return true;
             }
-            else
-                throw new IllegalMoveException(this, String.Format("Can not move from {0} to {1}", Position.ToString(), newPosition.ToString()));
+
 
             canLeap = false;
+            return false;
+        }
+
+        public override bool Move(PiecePosition newPosition, ChessTableSquare[,] table)
+        {
+            if (ValidateMove(newPosition, table))
+            {
+                Position = newPosition;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

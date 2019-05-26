@@ -57,32 +57,36 @@ namespace ChessProjectOOP
                     moves.Add(newPos);
             }
 
-            for (int i = (int)Position.Column + 1, j = Position.Row + 1; i < 8 & j < 8; i++, j++) //UP-UP
+            for (int i = (int)Position.Column + 1, j = Position.Row + 1; i <= 8 & j <= 8; i++, j++) //UP-UP
             {
                 var newPos = new PiecePosition(i, j);
                 if (ValidateMove(newPos, table, 5))
                     moves.Add(newPos);
             }
 
-            for (int i = (int)Position.Column - 1, j = (int)Position.Row + 1; i > 1 & j < 8; i--, j++) //DOWN-UP
+            for (int i = (int)Position.Column - 1, j = (int)Position.Row + 1; i >= 1 && j <= 8; i--, j++) //DOWN-left
             {
                 var newPos = new PiecePosition(i, j);
                 if (ValidateMove(newPos, table, 6))
                     moves.Add(newPos);
+                else
+                    break;
             }
 
-            for (int i = (int)Position.Column + 1, j = (int)Position.Row - 1; i < 8 & j > 1; i++, j--) //up-down
+            for (int i = (int)Position.Column + 1, j = (int)Position.Row - 1; i <= 8 & j > 1; i++, j--) //up-down
             {
                 var newPos = new PiecePosition(i, j);
                 if (ValidateMove(newPos, table, 7))
                     moves.Add(newPos);
             }
 
-            for (int i = (int)Position.Column - 1, j = (int)Position.Row - 1; i > 1 & j > 1; i--, j--) //down-down
+            for (int i = (int)Position.Column - 1, j = (int)Position.Row - 1; i >= 1 && j >= 1; i--, j--) //up-left
             {
                 var newPos = new PiecePosition(i, j);
                 if (ValidateMove(newPos, table, 8))
                     moves.Add(newPos);
+                else
+                    break;
             }
             return moves;
         }
@@ -136,7 +140,7 @@ namespace ChessProjectOOP
 
             if ((direction == 0 || direction == 5) && (int)newPosition.Column > (int)Position.Column && (int)newPosition.Row > (int)Position.Row)
             {
-                for (int i = (int)Position.Column + 1, j = (int)Position.Row + 1; i < 8 & j < 8; i++, j++)
+                for (int i = (int)Position.Column + 1, j = (int)Position.Row + 1; i <= (int)newPosition.Column & j < (int)newPosition.Row; i++, j++)
                     if (!table[i + 1, j + 1].IsEmpty)
                         return false;
                     else
@@ -145,28 +149,35 @@ namespace ChessProjectOOP
 
             if ((direction == 0 || direction == 6) && (int)newPosition.Column < (int)Position.Column && (int)newPosition.Row > (int)Position.Row)
             {
-                for (int i = (int)Position.Column - 1, j = (int)Position.Row + 1; i > 1 & j < 8; i--, j++)
-                    if (!table[i - 1, j + 1].IsEmpty)
+                for (int i = (int)Position.Column - 1, j = (int)Position.Row + 1; i >= (int)Position.Column & j <= (int)newPosition.Row; i--, j++)
+                {
+                    if (!table[i - 1, j - 1].IsEmpty)
                         return false;
-                    else
-                        return true;
+                }
+                return true;
             }
 
             if ((direction == 0 || direction == 7) && (int)newPosition.Column > (int)Position.Column && (int)newPosition.Row < (int)Position.Row)
             {
-                for (int i = (int)Position.Column + 1, j = (int)Position.Row - 1; i < 8 & j > 1; i++, j--)
+                for (int i = (int)Position.Column + 1, j = (int)Position.Row - 1; i <= (int)newPosition.Column & j > (int)newPosition.Row; i++, j--)
+                {
                     if (!table[i + 1, j - 1].IsEmpty)
-                    return false;
+                        return false;
+                }
+                return true;
             }
 
             if ((direction == 0 || direction == 8) && (int)newPosition.Column < (int)Position.Column && (int)newPosition.Row < (int)Position.Row)
             {
-                for (int i = (int)Position.Column - 1, j = (int)Position.Row - 1; i > 1 & j > 1; i--, j--)
+                for (int i = (int)Position.Column - 1, j = (int)Position.Row - 1; i >= (int)Position.Column & j >= (int)newPosition.Row; i--, j--)
+                {
                     if (!table[i - 1, j - 1].IsEmpty)
                         return false;
-                    else
-                        return true;
+                }
+                return true;
             }
+
+            return false;
         }
 
         public override bool Move(PiecePosition newPosition, ChessTableSquare[,] table)

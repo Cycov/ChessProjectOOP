@@ -35,6 +35,7 @@ namespace ChessProjectOOP
         public Player Player1 { get; set; }
         public Player Player2 { get; set; }
 
+
         public void MovePiece(PiecePosition from, PiecePosition to)
         {
             AttemptMove(squares[(int)from.Column - 1, from.Row - 1], squares[(int)to.Column - 1, to.Row - 1], true);
