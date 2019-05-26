@@ -38,35 +38,23 @@ namespace ChessProjectOOP
 
             for (int i = Position.Row - 1; i > 0; i--)
             {
-                try
-                {
-                    var newPos = new PiecePosition(Position.Column, i);
-                    ValidateMove(newPos, table, 2);
+                var newPos = new PiecePosition(Position.Column, i);
+                if (ValidateMove(newPos, table, 2))
                     moves.Add(newPos);
-                }
-                catch { }
             }
 
             for (int i = (int)Position.Column + 1; i < table.GetLength(0); i++)
             {
-                try
-                {
-                    var newPos = new PiecePosition((EColumn)i, Position.Row);
-                    ValidateMove(newPos, table, 3);
+                var newPos = new PiecePosition((EColumn)i, Position.Row);
+                if (ValidateMove(newPos, table, 3))
                     moves.Add(newPos);
-                }
-                catch { }
             }
 
             for (int i = (int)Position.Column - 1; i > 0; i--)
             {
-                try
-                {
-                    var newPos = new PiecePosition((EColumn)i, Position.Row);
-                    ValidateMove(newPos, table, 4);
+                var newPos = new PiecePosition((EColumn)i, Position.Row);
+                if (ValidateMove(newPos, table, 4))
                     moves.Add(newPos);
-                }
-                catch { }
             }
             return moves;
         }
@@ -85,27 +73,39 @@ namespace ChessProjectOOP
             {
                 for (int i = Position.Row + 1; i < newPosition.Row; i++) //up-down
                     if (!table[(int)Position.Column - 1, i - 1].IsEmpty)
-                        throw new IllegalMoveException(this, String.Format("Can not move from {0} to {1}", Position.ToString(), newPosition.ToString()));
+                        return false;
+                    else
+                        return true;
             }
+
             if ((direction == 0 || direction == 2) && newPosition.Row < Position.Row)
             {
                 for (int i = Position.Row - 1; i > newPosition.Row; i--) //up-down
                     if (!table[(int)Position.Column - 1, i - 1].IsEmpty)
-                        throw new IllegalMoveException(this, String.Format("Can not move from {0} to {1}", Position.ToString(), newPosition.ToString()));
+                        return false;
+                    else
+                        return true;
             }
+
 
             if ((direction == 0 || direction == 3) && (int)newPosition.Column > (int)Position.Column)
             {
                 for (int i = (int)Position.Column + 1; i < (int)newPosition.Column; i++)
                     if (!table[i - 1, Position.Row - 1].IsEmpty)
-                        throw new IllegalMoveException(this, String.Format("Can not move from {0} to {1}", Position.ToString(), newPosition.ToString()));
+                        return false;
+                    else
+                        return true;
             }
+
             if ((direction == 0 || direction == 4) && (int)newPosition.Column < (int)Position.Column)
             {
                 for (int i = (int)Position.Column - 1; i > (int)newPosition.Column; i--)
                     if (!table[i - 1, Position.Row - 1].IsEmpty)
-                        throw new IllegalMoveException(this, String.Format("Can not move from {0} to {1}", Position.ToString(), newPosition.ToString()));
+                        return false;
+                    else
+                        return true;
             }
+            
         }
 
         public override bool Move(PiecePosition newPosition, ChessTableSquare[,] table)
